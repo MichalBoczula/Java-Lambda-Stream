@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -136,4 +138,31 @@ public class BoardTestSuite {
         //Then
         Assert.assertEquals(2, longTasks);
     }
+
+    @Test
+    public void testAddTaskListAverageWorkingOnTask(){
+        //Given
+        Board project = prepareTestData();
+
+        //When
+        List<TaskList> inProgressTasks = new ArrayList<>();
+        inProgressTasks.add(new TaskList("In progress"));
+        long tasks = project.getTaskLists().stream()
+                .filter(inProgressTasks::contains)
+                .flatMap(tl -> tl.getTasks().stream())
+                .map(t -> t.getCreated())
+                .count();
+
+        List<TaskList> timeInProgressTasks = new ArrayList<>();
+        inProgressTasks.add(new TaskList("In progress"));
+        List<LocalDate> tasksTime = project.getTaskLists().stream()
+                .filter(inProgressTasks::contains)
+                .flatMap(tl -> tl.getTasks().stream())
+                .map(t -> t.getDeadline())
+                .collect(toList());
+
+        //Then
+        Assert.assertEquals(3, tasks);
+    }
+
 }
