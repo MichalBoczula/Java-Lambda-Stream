@@ -4,10 +4,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.LongStream;
+import java.util.OptionalDouble;
 
 import static java.util.stream.Collectors.toList;
 
@@ -143,26 +143,19 @@ public class BoardTestSuite {
     public void testAddTaskListAverageWorkingOnTask(){
         //Given
         Board project = prepareTestData();
+        OptionalDouble testDays = OptionalDouble.of(8.333333333333334);
 
         //When
         List<TaskList> inProgressTasks = new ArrayList<>();
         inProgressTasks.add(new TaskList("In progress"));
-        long tasks = project.getTaskLists().stream()
+        OptionalDouble days = project.getTaskLists().stream()
                 .filter(inProgressTasks::contains)
-                .flatMap(tl -> tl.getTasks().stream())
-                .map(t -> t.getCreated())
-                .count();
+                .flatMap(taskList -> taskList.getTasks().stream())
+                .mapToDouble(task -> Period.between(task.getCreated(), task.getDeadline()).getDays())
+                .average();
 
-        List<TaskList> timeInProgressTasks = new ArrayList<>();
-        inProgressTasks.add(new TaskList("In progress"));
-        List<LocalDate> tasksTime = project.getTaskLists().stream()
-                .filter(inProgressTasks::contains)
-                .flatMap(tl -> tl.getTasks().stream())
-                .map(t -> t.getDeadline())
-                .collect(toList());
-
-        //Then
-        Assert.assertEquals(3, tasks);
+         //Then
+        Assert.assertEquals(testDays, days);
     }
 
 }

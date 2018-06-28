@@ -6,11 +6,11 @@ public final class ForumUser {
 
     private final int id;
     private final String userName;
-    private final Character gender;
+    private final char gender;
     private final LocalDate birthDate;
     private final int postNumber;
 
-    public ForumUser(int id, String userName, Character gender, LocalDate birthDate, int postNumber) {
+    public ForumUser(int id, String userName, char gender, LocalDate birthDate, int postNumber) {
         this.id = id;
         this.userName = userName;
         this.gender = gender;
@@ -26,7 +26,7 @@ public final class ForumUser {
         return userName;
     }
 
-    public Character getGender() {
+    public char getGender() {
         return gender;
     }
 

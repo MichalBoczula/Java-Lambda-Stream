@@ -1,83 +1,102 @@
 package stream.main;
 
+import stream.beautifier.PoemBeautifier;
+import stream.book.Book;
 import stream.book.BookDirectory;
 import stream.forumuser.Forum;
 import stream.forumuser.ForumUser;
+import stream.iterate.NumbersGenerator;
+import stream.lambda.ExpressionExecutor;
+import stream.lambda.Processor;
+import stream.person.People;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class StreamMain {
 
     public static void main(String[] args){
 
+        task73();
+    }
+
+    public static void mod71(){
+        Processor processor = new Processor();
+        processor.execute(() -> System.out.println("" +
+                "This is an example text."));
+
+        ExpressionExecutor expressionExecutor = new ExpressionExecutor();
+
+        expressionExecutor.executeExpression(10, 5, (a, b) -> a + b);
+        expressionExecutor.executeExpression(10, 5, (a, b) -> a - b);
+        expressionExecutor.executeExpression(10, 5, (a, b) -> a * b);
+        expressionExecutor.executeExpression(10, 5, (a, b) -> a / b);
+    }
+
+    public static void task71(){
+        PoemBeautifier poemBeautifier = new PoemBeautifier();
+        System.out.println(poemBeautifier.beautify("aaa",(desc)-> desc+"ABC"));
+        System.out.println(poemBeautifier.beautify("aaa",(desc)-> desc.toUpperCase()));
+        String str = "CBA";
+        System.out.println(poemBeautifier.beautify("aaa",(desc)-> desc+str));
+        System.out.println(poemBeautifier.beautify("aaa",(desc)-> "XYZ".toLowerCase()+desc.toUpperCase()));
+    }
+
+    public static void mod72(){
+        System.out.println("Using Stream to generate even numbers from 1 to 20");
+        NumbersGenerator.generateEven(20);
+
+        People.getList().stream()
+                .map(s->s.toUpperCase()) //can exchange lambda expression with ref to methods
+                .map(String::toUpperCase)
+                .filter(s -> s.length() > 11)
+                .map(s -> s.substring(0, s.indexOf(' ') + 2)+ ".")
+                .filter(s -> s.substring(0,1).equals("M"))
+                .forEach(System.out::println);
+    }
+
+    public static void mod73(){
+        final BookDirectory theBookDirectory = new BookDirectory();
+
+        theBookDirectory.getList().stream()
+                .filter(book -> book.getYearOfPublication() > 2005)
+                .forEach(System.out::println);
+
+        List<Book> theResultListOfBooks = theBookDirectory.getList().stream()
+                .filter(book -> book.getYearOfPublication() > 2005)
+                .collect(Collectors.toList());
+
+        System.out.println("# elements: " + theResultListOfBooks.size());
+        theResultListOfBooks.stream()
+                .forEach(System.out::println);
+
+
+        Map<String, Book> theResultMapOfBooks = theBookDirectory.getList().stream()
+                .filter(book -> book.getYearOfPublication() > 2005)
+                .collect(Collectors.toMap(Book::getSignature, book -> book));
+
+        System.out.println("# elements: " + theResultMapOfBooks.size());
+        theResultMapOfBooks.entrySet().stream()
+                .map(entry -> entry.getKey() + ": " + entry.getValue())
+                .forEach(System.out::println);
+
+
+        String theResultStringOfBooks = theBookDirectory.getList().stream()
+                .filter(book -> book.getYearOfPublication() > 2005)
+                .map(Book::toString)
+                .collect(Collectors.joining(",\n","<<",">>"));
+
+        System.out.println(theResultStringOfBooks);
+    }
+
+    public static void task73(){
+        final Forum forum = new Forum();
         final List<ForumUser> forumUsersList = new ArrayList<>();
 
-//        Processor processor = new Processor();
-//        processor.execute(() -> System.out.println("" +
-//                "This is an example text."));
-//
-//        ExpressionExecutor expressionExecutor = new ExpressionExecutor();
-//
-//        expressionExecutor.executeExpression(10, 5, (a, b) -> a + b);
-//        expressionExecutor.executeExpression(10, 5, (a, b) -> a - b);
-//        expressionExecutor.executeExpression(10, 5, (a, b) -> a * b);
-//        expressionExecutor.executeExpression(10, 5, (a, b) -> a / b);
-//
-//        PoemBeautifier poemBeautifier = new PoemBeautifier();
-//        System.out.println(poemBeautifier.beautify("aaa",(desc)-> desc+"ABC"));
-//        System.out.println(poemBeautifier.beautify("aaa",(desc)-> desc.toUpperCase()));
-//        String str = "CBA";
-//        System.out.println(poemBeautifier.beautify("aaa",(desc)-> desc+str));
-//        System.out.println(poemBeautifier.beautify("aaa",(desc)-> "XYZ".toLowerCase()+desc.toUpperCase()));
-//
-//        System.out.println("Using Stream to generate even numbers from 1 to 20");
-//        NumbersGenerator.generateEven(20);
-
-//        People.getList().stream()
-////                .map(s->s.toUpperCase()) can exchange lambda expression with ref to methods
-//                .map(String::toUpperCase)
-//                .filter(s -> s.length() > 11)
-//                .map(s -> s.substring(0, s.indexOf(' ') + 2)+ ".")
-//                .filter(s -> s.substring(0,1).equals("M"))
-//                .forEach(System.out::println);
-
-        BookDirectory theBookDirectory = new BookDirectory();
-
-//        theBookDirectory.getList().stream()
-//                .filter(book -> book.getYearOfPublication() > 2005)
-//                .forEach(System.out::println);
-
-//        List<Book> theResultListOfBooks = theBookDirectory.getList().stream()
-//                .filter(book -> book.getYearOfPublication() > 2005)
-//                .collect(Collectors.toList());
-//
-//        System.out.println("# elements: " + theResultListOfBooks.size());
-//        theResultListOfBooks.stream()
-//                .forEach(System.out::println);
-
-
-//        Map<String, Book> theResultMapOfBooks = theBookDirectory.getList().stream()
-//                .filter(book -> book.getYearOfPublication() > 2005)
-//                .collect(Collectors.toMap(Book::getSignature, book -> book));
-
-//        System.out.println("# elements: " + theResultMapOfBooks.size());
-//        theResultMapOfBooks.entrySet().stream()
-//                .map(entry -> entry.getKey() + ": " + entry.getValue())
-//                .forEach(System.out::println);
-
-
-//        String theResultStringOfBooks = theBookDirectory.getList().stream()
-//                .filter(book -> book.getYearOfPublication() > 2005)
-//                .map(Book::toString)
-//                .collect(Collectors.joining(",\n","<<",">>"));
-//
-//        System.out.println(theResultStringOfBooks);
-
-        Forum forum = new Forum();
         forumUsersList.add(new ForumUser(1, "A", 'M', LocalDate.of(1993, 1, 1), 11));
         forumUsersList.add(new ForumUser(2, "B", 'F', LocalDate.of(1992, 2, 2), 4));
         forumUsersList.add(new ForumUser(3, "C", 'M', LocalDate.of(1991, 3, 3), 0));
@@ -96,16 +115,15 @@ public class StreamMain {
         forumUsersList.add(new ForumUser(16, "P", 'F', LocalDate.of(1995, 4, 11), 3));
         forumUsersList.add(new ForumUser(17, "R", 'M', LocalDate.of(1996, 5, 10), 22));
         forumUsersList.add(new ForumUser(18, "S", 'F', LocalDate.of(1997, 6, 11), 2));
-        forumUsersList.add(new ForumUser(19, "T", 'M', LocalDate.of(1998, 7, 21), 1));
+        forumUsersList.add(new ForumUser(19, "T", 'M', LocalDate.of(1998, 7, 21), 15));
         forumUsersList.add(new ForumUser(20, "Z", 'F', LocalDate.of(1990, 8, 31), 111));
 
 
         Map<Integer, ForumUser> theResultMapOfForumUsers = forum.getUserList(forumUsersList).stream()
-                .filter(forumUser -> (forumUser.getGender().equals('M')))
+                .filter(forumUser -> (forumUser.getGender() == 'M'))
                 .filter(forumUser -> (forumUser.getPostNumber() > 1))
-                .filter(forumUser -> (forumUser.getBirthDate().isBefore(LocalDate.of(1995,
-                1, 1))))
-                .collect(Collectors.toMap(ForumUser::getId, forumUser -> forumUser ));
+                .filter(forumUser -> (forumUser.getBirthDate().isBefore(LocalDate.now().minusYears(20))))
+                .collect(Collectors.toMap(ForumUser::getId, Function.identity()));
 
         System.out.println("# elements: " + theResultMapOfForumUsers.size());
         theResultMapOfForumUsers.entrySet().stream()

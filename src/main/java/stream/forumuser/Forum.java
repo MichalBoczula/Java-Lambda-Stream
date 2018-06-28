@@ -7,10 +7,6 @@ public final class Forum {
 
     private final List<ForumUser> forumUsersList = new ArrayList<>();
 
-    public Forum() {
-
-    }
-
     public List<ForumUser> getUserList(List<ForumUser> forumUsersList){
                 return new ArrayList<>(forumUsersList);
     }

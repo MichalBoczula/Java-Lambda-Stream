@@ -6,8 +6,10 @@ import java.util.List;
 public final class Continent {
 
     private final List<Country> countries = new ArrayList<>();
+    private final String name;
 
-    public Continent() {
+    public Continent(String name) {
+        this.name = name;
     }
 
     public void addCountry(Country country){

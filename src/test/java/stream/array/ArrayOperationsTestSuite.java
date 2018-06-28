@@ -3,6 +3,8 @@ package stream.array;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.OptionalDouble;
+
 public class ArrayOperationsTestSuite {
 
     @Test
@@ -32,11 +34,12 @@ public class ArrayOperationsTestSuite {
         numInts[19] = 20;
 
         final Numbers numbers = new Numbers();
+        final OptionalDouble testDouble = OptionalDouble.of(9.5);
 
         //when
         double avr = numbers.getAverage(numInts).getAsDouble();
 
         //then
-        Assert.assertEquals(9.5, avr, 0.01);
+        Assert.assertEquals(testDouble.orElse(0), avr, 0.01);
     }
 }
